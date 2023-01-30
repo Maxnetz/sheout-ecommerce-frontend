@@ -12,7 +12,6 @@ import {
     setIsCartOpen,
 } from "../../state";
 import { useNavigate } from "react-router-dom";
-import { style } from "@mui/system";
 
 const FlexBox = styled(Box)`
     display: flex;
@@ -27,11 +26,11 @@ const CartMenu = () => {
     const isCartOpen = useSelector((state) => state.cart.isCartOpen);
 
     const totalPrice = cart.reduce((total, item) => {
-        return (total = item.count = item.attributes.price);
+        return total + item.count * item.attributes.price;
     }, 0);
 
     return (
-        <Box // Overlay
+        <Box
             display={isCartOpen ? "block" : "none"}
             backgroundColor="rgba(0, 0, 0, 0.4)"
             position="fixed"
@@ -42,7 +41,6 @@ const CartMenu = () => {
             top="0"
             overflow="auto"
         >
-            {/* MODAL */}
             <Box
                 position="fixed"
                 right="0"
@@ -52,7 +50,7 @@ const CartMenu = () => {
                 backgroundColor="white"
             >
                 <Box padding="30px" overflow="auto" height="100%">
-                    {/*  HEADER */}
+                    {/* HEADER */}
                     <FlexBox mb="15px">
                         <Typography variant="h3">
                             SHOPPING BAG ({cart.length})
@@ -64,19 +62,18 @@ const CartMenu = () => {
 
                     {/* CART LIST */}
                     <Box>
-                        {cart.map((item) => {
+                        {cart.map((item) => (
                             <Box key={`${item.attributes.name}-${item.id}`}>
                                 <FlexBox p="15px 0">
                                     <Box flex="1 1 40%">
                                         <img
                                             alt={item?.name}
                                             width="123px"
-                                            height="164ox"
+                                            height="164px"
                                             src={`http://localhost:1337${item?.attributes?.image?.data?.attributes?.formats?.medium?.url}`}
                                         />
                                     </Box>
                                     <Box flex="1 1 60%">
-                                        {/* ITEM NAME */}
                                         <FlexBox mb="5px">
                                             <Typography fontWeight="bold">
                                                 {item.attributes.name}
@@ -93,12 +90,9 @@ const CartMenu = () => {
                                                 <CloseIcon />
                                             </IconButton>
                                         </FlexBox>
-
                                         <Typography>
                                             {item.attributes.shortDescription}
                                         </Typography>
-
-                                        {/* AMOUNT */}
                                         <FlexBox m="15px 0">
                                             <Box
                                                 display="flex"
@@ -131,17 +125,15 @@ const CartMenu = () => {
                                                     <AddIcon />
                                                 </IconButton>
                                             </Box>
-
-                                            {/* PRICE */}
                                             <Typography fontWeight="bold">
-                                                {item.attributes.price}
+                                                ${item.attributes.price}
                                             </Typography>
                                         </FlexBox>
                                     </Box>
                                 </FlexBox>
                                 <Divider />
-                            </Box>;
-                        })}
+                            </Box>
+                        ))}
                     </Box>
 
                     {/* ACTIONS */}
@@ -149,7 +141,7 @@ const CartMenu = () => {
                         <FlexBox m="20px 0">
                             <Typography fontWeight="bold">SUBTOTAL</Typography>
                             <Typography fontWeight="bold">
-                                {totalPrice}
+                                ${totalPrice}
                             </Typography>
                         </FlexBox>
                         <Button
